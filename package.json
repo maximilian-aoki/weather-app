@@ -1,0 +1,40 @@
+{
+  "name": "weather-app",
+  "version": "1.0.0",
+  "description": "A weather app build with JS, powered by WeatherAPI.com",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "initialize": "npm run init-webpack && npm run init-html && npm run init-server && npm run init-merge && npm run init-css",
+    "init-webpack": "npm install webpack webpack-cli --save-dev",
+    "init-html": "npm install html-webpack-plugin --save-dev",
+    "init-server": "npm install webpack-dev-server --save-dev",
+    "init-merge": "npm install webpack-merge --save-dev",
+    "init-css": "npm install css-loader mini-css-extract-plugin --save-dev",
+    "init-babel": "npm install babel-loader @babel/core @babel/preset-env --save-dev",
+    "init-formatting": "npm install eslint --save-dev && npm init @eslint/config && npm install prettier --save-dev --save-exact && npm install eslint-config-prettier --save-dev",
+    "start": "webpack serve --open --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js",
+    "git-deploy": "git subtree push --prefix dist origin gh-pages"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.23.5",
+    "@babel/preset-env": "^7.23.5",
+    "babel-loader": "^9.1.3",
+    "css-loader": "^6.8.1",
+    "eslint": "^8.55.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.0",
+    "html-webpack-plugin": "^5.5.3",
+    "mini-css-extract-plugin": "^2.7.6",
+    "prettier": "3.1.0",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1",
+    "webpack-merge": "^5.10.0"
+  }
+}
