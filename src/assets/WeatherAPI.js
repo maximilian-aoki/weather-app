@@ -1,4 +1,5 @@
 const weatherForecastEndpoint = 'http://api.weatherapi.com/v1/forecast.json?';
+const weatherSearchEndpoint = 'http://api.weatherapi.com/v1/search.json?';
 const weatherApiKey = 'f59714b9ced048d6b83171709230312';
 
 export default class WeatherAPI {
@@ -74,5 +75,30 @@ export default class WeatherAPI {
     });
 
     return hoursArr;
+  }
+
+  // PUBLIC - use user location input to get array of potential matches in API //
+  static async getLocationOptions(rawLocationInput) {
+    const weatherSearchParams = new URLSearchParams({
+      key: weatherApiKey,
+      q: rawLocationInput,
+    });
+    const myRequest = new Request(weatherSearchEndpoint + weatherSearchParams, {
+      mode: 'cors',
+    });
+
+    // fetch forecast //
+    try {
+      const response = await fetch(myRequest);
+      const rawData = await response.json();
+
+      return this.#cleanLocationOptions(rawData);
+    } catch (error) {
+      return `Error in getLocationOptions: ${error}`;
+    }
+  }
+
+  static #cleanLocationOptions(rawData) {
+    return [...new Set(rawData.map((item) => `${item.name}, ${item.country}`))];
   }
 }
