@@ -7,7 +7,7 @@ import * as Events from './assets/events';
 import WeatherAPI from './assets/WeatherAPI';
 import User from './assets/User';
 
-// INIT //
+// INIT APP //
 let user;
 
 if (localStorage.getItem('user')) {
