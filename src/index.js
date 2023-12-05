@@ -3,8 +3,9 @@ import './static/reset.css';
 import './static/style.css';
 
 // import modules
-import * as Events from './assets/events';
+import * as Events from './assets/Events';
 import WeatherAPI from './assets/WeatherAPI';
+import Search from './assets/Search';
 import User from './assets/User';
 
 // INIT APP //

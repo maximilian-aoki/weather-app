@@ -22,7 +22,7 @@ export default class WeatherAPI {
       const response = await fetch(myRequest);
       const rawData = await response.json();
 
-      return this.#cleanLocationForecast(rawData);
+      return WeatherAPI.#cleanLocationForecast(rawData);
     } catch (error) {
       return `Error in getLocationData: ${error}`;
     }
@@ -43,7 +43,7 @@ export default class WeatherAPI {
     cleanLocData.currentTempF = Math.round(rawData.current.temp_f);
 
     // pass in private hour array function //
-    cleanLocData.hours = this.#getLocHours(
+    cleanLocData.hours = WeatherAPI.#getLocHours(
       rawData,
       cleanLocData.currentTimeIndex,
     );
@@ -87,12 +87,12 @@ export default class WeatherAPI {
       mode: 'cors',
     });
 
-    // fetch forecast //
+    // fetch search //
     try {
       const response = await fetch(myRequest);
       const rawData = await response.json();
 
-      return this.#cleanLocationOptions(rawData);
+      return WeatherAPI.#cleanLocationOptions(rawData);
     } catch (error) {
       return `Error in getLocationOptions: ${error}`;
     }

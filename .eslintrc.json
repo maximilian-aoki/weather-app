@@ -12,6 +12,7 @@
     "no-console": "off",
     "import/no-extraneous-dependencies": "off",
     "prefer-destructuring": "off",
-    "no-use-before-define": "off"
+    "no-use-before-define": "off",
+    "lines-between-class-members": "off"
   }
 }
