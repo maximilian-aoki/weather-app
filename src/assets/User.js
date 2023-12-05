@@ -2,8 +2,6 @@ export default class User {
   constructor(locationObjects = [], currentLocIndex = -1) {
     this.locations = locationObjects;
     this.currentLocIndex = currentLocIndex;
-
-    this.getAppTime();
   }
 
   // PUBLIC METHODS //
@@ -19,8 +17,8 @@ export default class User {
     this.locations = newLocationArr;
   }
 
-  getAppTime() {
+  getUserTime() {
     const appTimeRaw = new Date();
-    this.currentAppTime = appTimeRaw.toISOString().split(':')[0];
+    this.userTime = appTimeRaw.toISOString().split(':')[0];
   }
 }

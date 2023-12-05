@@ -17,12 +17,17 @@ if (localStorage.getItem('user')) {
   console.log('getting user from localStorage with time'); // DEBUGGING
 
   const userInfo = JSON.parse(localStorage.getItem('user'));
+  const userTime = localStorage.getItem('time');
+
   user = new User(userInfo.locations, userInfo.currentLocIndex);
 
   const timeNowRaw = new Date();
   const timeNow = timeNowRaw.toISOString().split(':')[0];
 
-  if (user.currentAppTime !== timeNow && user.locations.length) {
+  console.log(`time now is ${timeNow}`); // DEBUGGING
+  console.log(`last user time is ${userTime}`); // DEBUGGING
+
+  if (timeNow !== userTime && user.locations.length) {
     refreshLocations();
   }
 
@@ -38,7 +43,8 @@ console.log(user);
 // ------------------------- METHODS ------------------------- //
 
 function pushStorage() {
-  user.getAppTime();
+  user.getUserTime();
+  localStorage.setItem('time', user.userTime);
   localStorage.setItem('user', JSON.stringify(user));
 }
 
