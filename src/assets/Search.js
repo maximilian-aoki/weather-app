@@ -1,12 +1,12 @@
 // import modules
 import WeatherAPI from './WeatherAPI';
+import * as Events from './Events';
 
 // cache dom
 const searchInput = document.querySelector('.search-input');
 const searchResults = document.querySelector('.search-results');
 
 export default class Search {
-  // methods
   static async renderLocationNames() {
     if (searchInput.value.length >= 3) {
       // fetch search //
@@ -37,9 +37,13 @@ export default class Search {
 
   static selectLocation(e) {
     if (e.target.classList.contains('location')) {
-      console.log(e.target.innerText);
+      Events.emit('addLocation', e.target.innerText);
+      searchInput.value = '';
+      Search.renderLocationNames();
     } else if (e.key === 'Enter' && searchResults.firstElementChild) {
-      console.log(searchResults.firstElementChild.innerText);
+      Events.emit('addLocation', searchResults.firstElementChild.innerText);
+      searchInput.value = '';
+      Search.renderLocationNames();
     }
   }
 }

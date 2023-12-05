@@ -6,28 +6,37 @@ import './static/style.css';
 import * as Events from './assets/Events';
 import WeatherAPI from './assets/WeatherAPI';
 import Search from './assets/Search';
+import Locations from './assets/Locations';
 import User from './assets/User';
 
-// INIT APP //
+// ----------------------- INIT APP ----------------------- //
+
 let user;
 
 if (localStorage.getItem('user')) {
   console.log('getting user from localStorage with time'); // DEBUGGING
 
+  const userInfo = JSON.parse(localStorage.getItem('user'));
+  user = new User(userInfo.locations, userInfo.currentLocIndex);
+
   const timeNowRaw = new Date();
   const timeNow = timeNowRaw.toISOString().split(':')[0];
-  user = JSON.parse(localStorage.getItem('user'));
 
   if (user.currentAppTime !== timeNow && user.locations.length) {
     refreshLocations();
   }
+
+  Events.emit('renderLocationList', user);
 } else {
   console.log('creating new user'); // DEBUGGING
 
   user = new User();
 }
 
-// METHODS //
+console.log(user);
+
+// ------------------------- METHODS ------------------------- //
+
 function pushStorage() {
   user.getAppTime();
   localStorage.setItem('user', JSON.stringify(user));
@@ -54,6 +63,7 @@ async function addLocation(locationStr) {
   user.currentLocIndex = user.locations.length - 1;
 
   pushStorage();
+  Events.emit('renderLocationList', user);
 
   console.log('adding location'); // DEBUGGING
   console.log(user); // DEBUGGING
@@ -72,7 +82,8 @@ function removeLocation(index) {
   console.log(user); // DEBUGGING
 }
 
-// bind custom events //
+// ---------------- bind custom events ---------------- //
+
 Events.on('addLocation', addLocation);
 Events.on('removeLocation', removeLocation);
 Events.on('refreshLocations', refreshLocations);
