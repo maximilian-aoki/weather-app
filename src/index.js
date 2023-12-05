@@ -24,11 +24,14 @@ if (localStorage.getItem('user')) {
   const timeNowRaw = new Date();
   const timeNow = timeNowRaw.toISOString().split(':')[0];
 
-  console.log(`time now is ${timeNow}`); // DEBUGGING
-  console.log(`last user time is ${userTime}`); // DEBUGGING
+  console.log(`time now: ${timeNow}\nlast user time: ${userTime}`); // DEBUGGING
 
   if (timeNow !== userTime && user.locations.length) {
-    refreshLocations();
+    try {
+      refreshLocations();
+    } catch (error) {
+      console.log(`error on refresh: ${error}`);
+    }
   }
 
   Events.emit('renderLocationList', user);
@@ -36,9 +39,8 @@ if (localStorage.getItem('user')) {
   console.log('creating new user'); // DEBUGGING
 
   user = new User();
+  console.log(user); // DEBUGGING
 }
-
-console.log(user);
 
 // ------------------------- METHODS ------------------------- //
 

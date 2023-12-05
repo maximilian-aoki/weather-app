@@ -13,16 +13,22 @@ export default class Locations {
     userObj.locations.forEach(Locations.#renderListItem);
   }
 
-  static #renderListItem(locationObj) {
+  static #renderListItem(locationObj, index) {
     const newItem = document.createElement('li');
     newItem.classList.add('location');
+    newItem.setAttribute('data-index', index);
     newItem.innerText = locationObj.name;
 
     locationList.appendChild(newItem);
   }
+
+  static changeLocation(e) {
+    console.log(Number(e.target.getAttribute('data-index')));
+  }
 }
 
 // bind default events
+locationList.addEventListener('click', Locations.changeLocation);
 
 // bind custom events
 Events.on('renderLocationList', Locations.renderLocationList);
