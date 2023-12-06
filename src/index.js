@@ -7,6 +7,7 @@ import * as Events from './assets/Events';
 import WeatherAPI from './assets/WeatherAPI';
 import Search from './assets/Search';
 import Locations from './assets/Locations';
+import Hourly from './assets/Hourly';
 import User from './assets/User';
 
 // ----------------------- INIT APP ----------------------- //
@@ -26,19 +27,23 @@ if (localStorage.getItem('user')) {
 
   console.log(`time now: ${timeNow}\nlast user time: ${userTime}`); // DEBUGGING
 
-  if (timeNow !== userTime && user.locations.length) {
+  if (timeNow === userTime && user.locations.length) {
     try {
       refreshLocations();
     } catch (error) {
       console.log(`error on refresh: ${error}`);
+      Events.emit('renderLocationList', user);
     }
+  } else {
+    Events.emit('renderLocationList', user);
+    console.log(user); // DEBUGGING
   }
-
-  Events.emit('renderLocationList', user);
 } else {
   console.log('creating new user'); // DEBUGGING
 
   user = new User();
+  Events.emit('renderLocationList', user);
+
   console.log(user); // DEBUGGING
 }
 
@@ -59,6 +64,8 @@ async function refreshLocations() {
   user.locations = await Promise.all(locationPromises);
 
   pushStorage();
+  Events.emit('renderLocationList', user);
+  Events.emit('renderLocationWeather', user);
 
   console.log('finished refresh'); // DEBUGGING
   console.log(user); // DEBUGGING
@@ -72,6 +79,7 @@ async function addLocation(locationStr) {
 
   pushStorage();
   Events.emit('renderLocationList', user);
+  Events.emit('renderLocationWeather', user);
 
   console.log('adding location'); // DEBUGGING
   console.log(user); // DEBUGGING
@@ -85,13 +93,28 @@ function removeLocation(index) {
       : user.currentLocIndex;
 
   pushStorage();
+  Events.emit('renderLocationList', user);
+  Events.emit('renderLocationWeather', user);
 
   console.log('removing location'); // DEBUGGING
   console.log(user); // DEBUGGING
 }
 
+function moveToLocation(index) {
+  if (index !== user.currentLocIndex) {
+    user.currentLocIndex = index;
+
+    pushStorage();
+    Events.emit('renderLocationWeather', user);
+
+    console.log('switched location'); // DEBUGGING
+    console.log(user); // DEBUGGING
+  }
+}
+
 // ---------------- bind custom events ---------------- //
 
+Events.on('refreshLocations', refreshLocations);
 Events.on('addLocation', addLocation);
 Events.on('removeLocation', removeLocation);
-Events.on('refreshLocations', refreshLocations);
+Events.on('moveToLocation', moveToLocation);

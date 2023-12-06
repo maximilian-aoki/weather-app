@@ -29,26 +29,25 @@ export default class Search {
 
   static #renderListItem(locationStr) {
     const newItem = document.createElement('li');
-    newItem.classList.add('location');
+    newItem.classList.add('result');
     newItem.innerText = locationStr;
 
     searchResults.appendChild(newItem);
   }
 
   static selectLocation(e) {
-    if (e.target.classList.contains('location')) {
+    if (e.target.classList.contains('result')) {
       Events.emit('addLocation', e.target.innerText);
-      searchInput.value = '';
-      Search.renderLocationNames();
-    } else if (e.key === 'Enter' && searchResults.firstElementChild) {
-      Events.emit('addLocation', searchResults.firstElementChild.innerText);
-      searchInput.value = '';
-      Search.renderLocationNames();
+      Search.#removeSearchResults();
     }
+  }
+
+  static async #removeSearchResults() {
+    searchInput.value = '';
+    Search.renderLocationNames();
   }
 }
 
 // bind default events
 searchInput.addEventListener('input', Search.renderLocationNames);
-searchInput.addEventListener('keypress', Search.selectLocation);
 searchResults.addEventListener('click', Search.selectLocation);

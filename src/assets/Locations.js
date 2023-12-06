@@ -23,7 +23,7 @@ export default class Locations {
   }
 
   static changeLocation(e) {
-    console.log(Number(e.target.getAttribute('data-index')));
+    Events.emit('moveToLocation', Number(e.target.getAttribute('data-index')));
   }
 }
 

@@ -3,12 +3,35 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Maxy Weather</title>
+    <title>Maximum Weather</title>
   </head>
-  <body>
-    <h1>Maxy Weather</h1>
-    <input type="text" class="search-input" />
-    <ul class="search-results"></ul>
-    <ul class="locations-list"></ul>
+  <body class="grid">
+    <div class="header-container grid">
+      <h1>WHATEVER THE WEATHER</h1>
+    </div>
+    <div class="search-container grid">
+      <div class="search-message-container">
+        <p>Search Cities -> Click to Add!</p>
+      </div>
+      <div class="search-input-container">
+        <input type="text" class="search-input" placeholder="search..." />
+        <ul class="search-results"></ul>
+      </div>
+    </div>
+    <div class="content-container grid">
+      <div class="locations-container grid">
+        <h2>My Locations</h2>
+        <div class="locations-list-frame">
+          <ul class="locations-list grid"></ul>
+        </div>
+      </div>
+      <div class="weather-container grid">
+        <div class="weather-meta-container grid"></div>
+        <div class="hourly-frame grid">
+          <ul class="hourly-list grid"></ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-container grid">2023 Copyright Maximilian Aoki</div>
   </body>
 </html>

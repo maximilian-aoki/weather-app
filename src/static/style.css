@@ -7,10 +7,227 @@ html {
 *::after {
   box-sizing: inherit;
 }
+/* import font */
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@200;400;600&display=swap');
 body {
+  font-family: 'Vazirmatn', sans-serif;
   min-height: 100vh;
+  grid-template: 12rem 5rem 30rem 1fr 10rem / 1fr 50rem 1fr;
+  grid-template-areas:
+    '....    header  ....'
+    '....    search  ....'
+    '....    content ....'
+    '....    ....    ....'
+    'footer  footer  footer';
+  gap: 1rem;
 }
 /* for debugging */
 * {
-  outline: 1px solid grey;
+  /* outline: 1px solid grey; */
+}
+
+/* LAYOUT */
+.grid {
+  display: grid;
+}
+
+/* HEADER */
+.header-container {
+  grid-area: header;
+  justify-content: center;
+  align-content: end;
+}
+.header-container > h1 {
+  font-weight: 600;
+  font-size: 3.5rem;
+  letter-spacing: 0.35rem;
+}
+
+/* SEARCH */
+.search-container {
+  grid-area: search;
+  grid-template-rows: auto 1fr;
+  justify-content: center;
+}
+.search-message-container {
+  text-align: center;
+  font-style: italic;
+  letter-spacing: 0.18rem;
+}
+.search-input-container {
+  position: relative;
+  margin-top: 0.2rem;
+  width: 20rem;
+}
+.search-input {
+  width: 100%;
+  height: 2rem;
+  padding: 0 1rem;
+  padding-top: 0.1rem;
+  border-radius: 0.5rem;
+  outline: none;
+  border: 1px solid grey;
+  font-family: 'Vazirmatn', sans-serif;
+  font-size: 1rem;
+}
+.search-results {
+  width: 97%;
+  margin: 0 0.3rem;
+  position: absolute;
+  z-index: 2;
+  background-color: rgb(231, 231, 231);
+}
+.result {
+  padding: 0.5rem 1rem;
+}
+/* search interactions */
+.result:hover {
+  cursor: pointer;
+  background-color: rgb(204, 253, 253);
+}
+
+/* CONTENT */
+.content-container {
+  grid-area: content;
+  grid-template-columns: 1fr 2fr;
+  gap: 0.5rem;
+}
+/* locations container */
+.locations-container {
+  border-radius: 0.5rem;
+  border: 3px solid rgb(208, 208, 208);
+  padding: 0.5rem;
+  grid-template-rows: auto 1fr;
+}
+.locations-container > h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  height: 2rem;
+  letter-spacing: 0.27rem;
+  text-align: center;
+}
+.locations-list-frame {
+  height: 26.5rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  overflow: auto;
+  background-color: rgb(213, 213, 213);
+}
+.locations-list {
+  gap: 0.5rem;
+  grid-auto-rows: 2.5rem;
+}
+.location {
+  display: grid;
+  padding: 0.5rem;
+  padding-top: 0.7rem;
+  align-content: center;
+  background-color: white;
+  border-radius: 0.2rem;
+}
+
+/* locations interactions */
+.location:hover {
+  cursor: pointer;
+  background-color: rgb(204, 253, 253);
+}
+
+/* weather container */
+.weather-container {
+  border-radius: 0.5rem;
+  border: 3px solid rgb(208, 208, 208);
+  grid-template-rows: 1fr 2fr;
+}
+.weather-meta-container {
+  margin: 0.5rem;
+  grid-template-columns: 6fr 7fr;
+}
+/* meta info */
+.meta-text {
+  grid-template-rows: auto auto;
+  align-content: center;
+}
+.text-name > h3 {
+  font-size: 1.7rem;
+  font-weight: 600;
+}
+.text-name > h4 {
+  margin-top: 0.2rem;
+  font-size: 1.3rem;
+  font-style: italic;
+}
+.text-condition > h3 {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+.text-condition > p {
+  margin-top: 0.2rem;
+  font-size: 1rem;
+  font-style: italic;
+}
+.meta-data {
+  grid-template-columns: 1fr 1fr;
+}
+.data-icon {
+  place-content: center;
+  object-fit: contain;
+}
+.data-temp {
+  place-content: center;
+  font-size: 3rem;
+  font-weight: 400;
+}
+.data-temp > p {
+  padding-top: 0.5rem;
+  display: grid;
+  grid-auto-flow: column;
+}
+.data-temp > p > sup {
+  font-size: 1.5rem;
+}
+/* hourly */
+.hourly-frame {
+  margin: 0.5rem;
+  background-color: rgb(213, 213, 213);
+  border-radius: 0.5rem;
+  overflow: auto;
+}
+.hourly-list {
+  grid-auto-columns: 10rem;
+  grid-auto-flow: column;
+  gap: 0.5rem;
+  padding: 0.5rem;
+}
+/* generated hours */
+.hourly-list > li {
+  border-radius: 0.5rem;
+  background-color: white;
+  display: grid;
+  padding: 1rem;
+  grid-template-rows: 6fr 10fr 7fr;
+}
+.hourly-list > li > div {
+  place-content: center;
+}
+.hourly-temp > p {
+  padding-top: 0.4rem;
+  display: grid;
+  grid-auto-flow: column;
+  font-size: 2.3rem;
+}
+.hourly-temp > p > sup {
+  font-size: 1.2rem;
+}
+.hourly-time {
+  font-size: 2rem;
+}
+
+/* FOOTER */
+.footer-container {
+  grid-area: footer;
+  place-content: center;
+  font-weight: 600;
+  background-color: rgb(241, 241, 241);
+  padding: 0.5rem;
 }
