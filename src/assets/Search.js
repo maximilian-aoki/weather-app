@@ -38,11 +38,11 @@ export default class Search {
   static selectLocation(e) {
     if (e.target.classList.contains('result')) {
       Events.emit('addLocation', e.target.innerText);
-      Search.#removeSearchResults();
+      Search.removeSearchResults();
     }
   }
 
-  static async #removeSearchResults() {
+  static async removeSearchResults() {
     searchInput.value = '';
     Search.renderLocationNames();
   }

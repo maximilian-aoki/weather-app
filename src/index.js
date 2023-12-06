@@ -27,15 +27,15 @@ if (localStorage.getItem('user')) {
 
   console.log(`time now: ${timeNow}\nlast user time: ${userTime}`); // DEBUGGING
 
-  if (timeNow === userTime && user.locations.length) {
+  if (timeNow !== userTime && user.locations.length) {
     try {
       refreshLocations();
     } catch (error) {
       console.log(`error on refresh: ${error}`);
-      Events.emit('renderLocationList', user);
+      renderAll();
     }
   } else {
-    Events.emit('renderLocationList', user);
+    renderAll();
     console.log(user); // DEBUGGING
   }
 } else {
@@ -55,6 +55,12 @@ function pushStorage() {
   localStorage.setItem('user', JSON.stringify(user));
 }
 
+function renderAll() {
+  Events.emit('renderLocationList', user);
+  Events.emit('showActiveLocation', user);
+  Events.emit('renderLocationWeather', user);
+}
+
 async function refreshLocations() {
   console.log('starting refresh'); // DEBUGGING
 
@@ -64,8 +70,7 @@ async function refreshLocations() {
   user.locations = await Promise.all(locationPromises);
 
   pushStorage();
-  Events.emit('renderLocationList', user);
-  Events.emit('renderLocationWeather', user);
+  renderAll();
 
   console.log('finished refresh'); // DEBUGGING
   console.log(user); // DEBUGGING
@@ -78,8 +83,7 @@ async function addLocation(locationStr) {
   user.currentLocIndex = user.locations.length - 1;
 
   pushStorage();
-  Events.emit('renderLocationList', user);
-  Events.emit('renderLocationWeather', user);
+  renderAll();
 
   console.log('adding location'); // DEBUGGING
   console.log(user); // DEBUGGING
@@ -93,8 +97,7 @@ function removeLocation(index) {
       : user.currentLocIndex;
 
   pushStorage();
-  Events.emit('renderLocationList', user);
-  Events.emit('renderLocationWeather', user);
+  renderAll();
 
   console.log('removing location'); // DEBUGGING
   console.log(user); // DEBUGGING
@@ -105,9 +108,10 @@ function moveToLocation(index) {
     user.currentLocIndex = index;
 
     pushStorage();
+    Events.emit('showActiveLocation', user);
     Events.emit('renderLocationWeather', user);
 
-    console.log('switched location'); // DEBUGGING
+    console.log(`switched location to index ${index}`); // DEBUGGING
     console.log(user); // DEBUGGING
   }
 }

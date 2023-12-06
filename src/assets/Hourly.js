@@ -8,39 +8,48 @@ const hourlyList = document.querySelector('.hourly-list');
 
 export default class Hourly {
   static renderLocationWeather(userObj) {
-    const currentLocObj = userObj.locations[userObj.currentLocIndex];
+    if (userObj.currentLocIndex >= 0) {
+      const currentLocObj = userObj.locations[userObj.currentLocIndex];
 
-    weatherMetaContainer.innerHTML = `
-      <div class="meta-text grid">
-        <div class="text-name">
-          <h3>${currentLocObj.name.split(',')[0]}</h3>
-          <h4>${currentLocObj.name.split(',')[1].trim()}</h4>
+      weatherMetaContainer.innerHTML = `
+        <div class="meta-text grid">
+          <div class="text-name">
+            <h3>${currentLocObj.name.split(',')[0]}</h3>
+            <h4>${currentLocObj.name.split(',')[1].trim()}</h4>
+          </div>
+          <div class="text-condition">
+            <h3>Current Condition:</h3>
+            <p>${currentLocObj.currentCondition}</p>
+          </div>
         </div>
-        <div class="text-condition">
-          <h3>Current Condition:</h3>
-          <p>${currentLocObj.currentCondition}</p>
+        <div class="meta-data grid">
+          <div class="data-icon grid">
+            <img
+              src="https://${currentLocObj.currentConditionIcon}"
+            />
+          </div>
+          <div class="data-temp grid">
+            <p>
+              <span class="data-temp-num">${currentLocObj.currentTempC}</span>
+              <sup>o</sup>
+              <span class="data-temp-system">C</span>
+            </p>
+          </div>
         </div>
-      </div>
-      <div class="meta-data grid">
-        <div class="data-icon grid">
-          <img
-            src="https://${currentLocObj.currentConditionIcon}"
-          />
-        </div>
-        <div class="data-temp grid">
-          <p>
-            <span class="data-temp-num">${currentLocObj.currentTempC}</span>
-            <sup>o</sup>
-            <span class="data-temp-system">C</span>
-          </p>
-        </div>
-      </div>
-      `;
+        `;
 
-    // remove all li from ul, re-render all new li, and then scroll left to start of hours //
-    [...hourlyList.children].forEach((child) => hourlyList.removeChild(child));
-    currentLocObj.hours.forEach(Hourly.#addHourDisplay);
-    hourlyFrame.scrollLeft = 0;
+      // remove all li from ul, re-render all new li, and then scroll left to start of hours //
+      [...hourlyList.children].forEach((child) =>
+        hourlyList.removeChild(child),
+      );
+      currentLocObj.hours.forEach(Hourly.#addHourDisplay);
+      hourlyFrame.scrollLeft = 0;
+    } else {
+      weatherMetaContainer.innerHTML = '';
+      [...hourlyList.children].forEach((child) =>
+        hourlyList.removeChild(child),
+      );
+    }
   }
 
   static #addHourDisplay(hourObj, index) {
@@ -82,79 +91,6 @@ export default class Hourly {
     }
   }
 }
-/*
-        <div class="weather-meta-container grid">
-          <div class="meta-text grid">
-            <div class="text-name">
-              <h3>Hawaiian Gardens</h3>
-              <h4>United States of America</h4>
-            </div>
-            <div class="text-condition">
-              <h3>Current Condition:</h3>
-              <p>Partly cloudy</p>
-            </div>
-          </div>
-          <div class="meta-data grid">
-            <div class="data-icon grid">
-              <img
-                src="https://cdn.weatherapi.com/weather/64x64/night/113.png"
-              />
-            </div>
-            <div class="data-temp grid">
-              <p>
-                <span class="data-temp-num">-23</span>
-                <sup>o</sup>
-                <span class="data-temp-system">C</span>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="hourly-frame grid">
-          <ul class="hourly-list grid">
-            <li>
-              <div class="hourly-temp grid">
-                <p>
-                  <span class="hour-temp-num">-23</span>
-                  <sup>o</sup>
-                  <span class="hour-temp-system">C</span>
-                </p>
-              </div>
-              <div class="hourly-condition grid">
-                <img
-                  src="https://cdn.weatherapi.com/weather/64x64/night/113.png"
-                />
-              </div>
-              <div class="hourly-time grid">
-                <p>12 PM</p>
-              </div>
-            </li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-          </ul>
-        </div>
-
-*/
 
 // bind custom events
 Events.on('renderLocationWeather', Hourly.renderLocationWeather);
