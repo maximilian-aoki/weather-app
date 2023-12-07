@@ -10,6 +10,9 @@ import Locations from './assets/Locations';
 import Hourly from './assets/Hourly';
 import User from './assets/User';
 
+// cache loader
+const loadSpinner = document.querySelector('.loader');
+
 // ----------------------- INIT APP ----------------------- //
 
 let user;
@@ -20,14 +23,18 @@ if (localStorage.getItem('user')) {
   const userInfo = JSON.parse(localStorage.getItem('user'));
   const userTime = localStorage.getItem('time');
 
-  user = new User(userInfo.locations, userInfo.currentLocIndex);
+  user = new User(
+    userInfo.locations,
+    userInfo.currentLocIndex,
+    userInfo.currentDeg,
+  );
 
   const timeNowRaw = new Date();
   const timeNow = timeNowRaw.toISOString().split(':')[0];
 
   console.log(`time now: ${timeNow}\nlast user time: ${userTime}`); // DEBUGGING
 
-  if (timeNow !== userTime && user.locations.length) {
+  if (timeNow === userTime && user.locations.length) {
     try {
       refreshLocations();
     } catch (error) {
@@ -43,6 +50,7 @@ if (localStorage.getItem('user')) {
 
   user = new User();
   Events.emit('renderLocationList', user);
+  Events.emit('renderDegrees', user.currentDeg);
 
   console.log(user); // DEBUGGING
 }
@@ -59,15 +67,20 @@ function renderAll() {
   Events.emit('renderLocationList', user);
   Events.emit('showActiveLocation', user);
   Events.emit('renderLocationWeather', user);
+  Events.emit('renderDegrees', user.currentDeg);
 }
 
 async function refreshLocations() {
   console.log('starting refresh'); // DEBUGGING
 
+  // activate loader, send batch calls to WeatherAPI for refresh //
+  loadSpinner.classList.add('active');
   const locationPromises = user.locations.map((location) =>
     WeatherAPI.getLocationData(location.name),
   );
+
   user.locations = await Promise.all(locationPromises);
+  loadSpinner.classList.remove('active');
 
   pushStorage();
   renderAll();
@@ -77,7 +90,10 @@ async function refreshLocations() {
 }
 
 async function addLocation(locationStr) {
+  // activate loader, send single call to WeatherAPI for adding location //
+  loadSpinner.classList.add('active');
   const newLocation = await WeatherAPI.getLocationData(locationStr);
+  loadSpinner.classList.remove('active');
 
   user.addLocation(newLocation);
   user.currentLocIndex = user.locations.length - 1;
@@ -95,6 +111,12 @@ function removeLocation(index) {
     index <= user.currentLocIndex
       ? (user.currentLocIndex -= 1)
       : user.currentLocIndex;
+
+  // very roughly correcting current loc index if
+  // user deletes first location while it is selected with others present
+  if (user.currentLocIndex < 0 && Boolean(user.locations.length)) {
+    user.currentLocIndex = 0;
+  }
 
   pushStorage();
   renderAll();
@@ -116,9 +138,21 @@ function moveToLocation(index) {
   }
 }
 
+function toggleDegrees(deg) {
+  user.currentDeg = deg;
+
+  pushStorage();
+  Events.emit('showActiveLocation', user);
+  Events.emit('renderLocationWeather', user);
+
+  console.log(`toggled degrees to ${deg}`); // DEBUGGING
+  console.log(user); // DEBUGGING
+}
+
 // ---------------- bind custom events ---------------- //
 
 Events.on('refreshLocations', refreshLocations);
 Events.on('addLocation', addLocation);
 Events.on('removeLocation', removeLocation);
 Events.on('moveToLocation', moveToLocation);
+Events.on('toggleDegrees', toggleDegrees);

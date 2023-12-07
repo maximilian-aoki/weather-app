@@ -10,6 +10,7 @@
       <h1>WHATEVER THE WEATHER</h1>
     </div>
     <div class="search-container grid">
+      <img class="loader" src="./static/images/spinner.gif" />
       <div class="search-message-container">
         <p>Search Cities -> Click to Add!</p>
       </div>
@@ -27,6 +28,10 @@
         </div>
       </div>
       <div class="weather-container grid">
+        <div class="temp-buttons grid">
+          <button type="button" class="degC button">C</button>
+          <button type="button" class="degF button">F</button>
+        </div>
         <div class="weather-meta-container grid"></div>
         <div class="hourly-frame grid">
           <ul class="hourly-list grid"></ul>

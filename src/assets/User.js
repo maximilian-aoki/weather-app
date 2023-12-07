@@ -1,7 +1,8 @@
 export default class User {
-  constructor(locationObjects = [], currentLocIndex = -1) {
+  constructor(locationObjects = [], currentLocIndex = -1, currentDeg = 'C') {
     this.locations = locationObjects;
     this.currentLocIndex = currentLocIndex;
+    this.currentDeg = currentDeg;
   }
 
   // PUBLIC METHODS //

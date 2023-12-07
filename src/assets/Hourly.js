@@ -6,10 +6,16 @@ const weatherMetaContainer = document.querySelector('.weather-meta-container');
 const hourlyFrame = document.querySelector('.hourly-frame');
 const hourlyList = document.querySelector('.hourly-list');
 
+const tempButtons = document.querySelector('.temp-buttons');
+
 export default class Hourly {
   static renderLocationWeather(userObj) {
     if (userObj.currentLocIndex >= 0) {
       const currentLocObj = userObj.locations[userObj.currentLocIndex];
+      const currentTemp =
+        userObj.currentDeg === 'C'
+          ? currentLocObj.currentTempC
+          : currentLocObj.currentTempF;
 
       weatherMetaContainer.innerHTML = `
         <div class="meta-text grid">
@@ -30,9 +36,9 @@ export default class Hourly {
           </div>
           <div class="data-temp grid">
             <p>
-              <span class="data-temp-num">${currentLocObj.currentTempC}</span>
+              <span class="data-temp-num">${currentTemp}</span>
               <sup>o</sup>
-              <span class="data-temp-system">C</span>
+              <span class="data-temp-system">${userObj.currentDeg}</span>
             </p>
           </div>
         </div>
@@ -42,7 +48,11 @@ export default class Hourly {
       [...hourlyList.children].forEach((child) =>
         hourlyList.removeChild(child),
       );
-      currentLocObj.hours.forEach(Hourly.#addHourDisplay);
+
+      currentLocObj.hours.forEach((item, index) => {
+        Hourly.addHourDisplay(item, index, userObj.currentDeg);
+      });
+
       hourlyFrame.scrollLeft = 0;
     } else {
       weatherMetaContainer.innerHTML = '';
@@ -52,16 +62,17 @@ export default class Hourly {
     }
   }
 
-  static #addHourDisplay(hourObj, index) {
+  static addHourDisplay(hourObj, index, currentDegFormat) {
     const newHour = document.createElement('li');
     const timeDisplay = Hourly.#getDisplayTime(hourObj.timeIndex, index);
+    const tempDisplay = Hourly.#getDisplayTemp(hourObj, currentDegFormat);
 
     newHour.innerHTML = `
     <div class="hourly-temp grid">
       <p>
-        <span class="hour-temp-num">${hourObj.tempC}</span>
+        <span class="hour-temp-num">${tempDisplay}</span>
         <sup>o</sup>
-        <span class="hour-temp-system">C</span>
+        <span class="hour-temp-system">${currentDegFormat}</span>
       </p>
     </div>
     <div class="hourly-condition grid">
@@ -90,7 +101,38 @@ export default class Hourly {
       return `${timeIndex - 12} PM`;
     }
   }
+
+  static #getDisplayTemp(hourObj, currentDegFormat) {
+    return currentDegFormat === 'C' ? hourObj.tempC : hourObj.tempF;
+  }
+
+  static toggleDegrees(e) {
+    if (
+      e.target.classList.contains('button') &&
+      !e.target.classList.contains('active')
+    ) {
+      [...tempButtons.children].forEach((button) => {
+        button.classList.remove('active');
+      });
+      e.target.classList.add('active');
+
+      Events.emit('toggleDegrees', e.target.innerText);
+    }
+  }
+
+  static renderDegrees(degStr) {
+    [...tempButtons.children].forEach((button) => {
+      button.classList.remove('active');
+      if (button.innerText === degStr) {
+        button.classList.add('active');
+      }
+    });
+  }
 }
+
+// bind default events
+tempButtons.addEventListener('click', Hourly.toggleDegrees);
 
 // bind custom events
 Events.on('renderLocationWeather', Hourly.renderLocationWeather);
+Events.on('renderDegrees', Hourly.renderDegrees);
