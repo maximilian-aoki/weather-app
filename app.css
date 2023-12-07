@@ -175,6 +175,7 @@ body {
 
 /* SEARCH */
 .search-container {
+  position: relative;
   grid-area: search;
   grid-template-rows: auto 1fr;
   justify-content: center;
@@ -275,7 +276,6 @@ body {
 }
 .location.active {
   border-left: 4px solid rgb(79, 200, 200);
-  /* background-color: rgb(243, 253, 253); */
 }
 .delete-button:hover {
   background-color: rgb(200, 104, 104);
@@ -412,6 +412,18 @@ body {
   font-weight: 600;
   background-color: rgb(241, 241, 241);
   padding: 0.5rem;
+}
+
+/* LOADER */
+.loader {
+  position: absolute;
+  transform: scale(0.2);
+  right: 5.3rem;
+  top: -5.8rem;
+  visibility: hidden;
+}
+.loader.active {
+  visibility: visible;
 }
 
 
