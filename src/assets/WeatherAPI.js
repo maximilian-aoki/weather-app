@@ -1,5 +1,5 @@
-const weatherForecastEndpoint = 'http://api.weatherapi.com/v1/forecast.json?';
-const weatherSearchEndpoint = 'http://api.weatherapi.com/v1/search.json?';
+const weatherForecastEndpoint = 'https://api.weatherapi.com/v1/forecast.json?';
+const weatherSearchEndpoint = 'https://api.weatherapi.com/v1/search.json?';
 const weatherApiKey = 'f59714b9ced048d6b83171709230312';
 
 export default class WeatherAPI {
