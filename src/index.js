@@ -10,8 +10,12 @@ import Locations from './assets/Locations';
 import Hourly from './assets/Hourly';
 import User from './assets/User';
 
+// import images
+import LoadSpinner from './static/images/spinner.gif';
+
 // cache loader
 const loadSpinner = document.querySelector('.loader');
+loadSpinner.src = LoadSpinner;
 
 // ----------------------- INIT APP ----------------------- //
 
@@ -34,7 +38,7 @@ if (localStorage.getItem('user')) {
 
   console.log(`time now: ${timeNow}\nlast user time: ${userTime}`); // DEBUGGING
 
-  if (timeNow === userTime && user.locations.length) {
+  if (timeNow !== userTime && user.locations.length) {
     try {
       refreshLocations();
     } catch (error) {
